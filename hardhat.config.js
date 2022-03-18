@@ -17,6 +17,12 @@ const { PRIVATE_KEY, WEB3_INFURA_PROJECT_ID, ETHERSCAN_TOKEN } = process.env;
 
 module.exports = {
   solidity: "0.8.11",
+  settings: {
+    optimizer: {
+      enabled: true,
+      runs: 1000,
+    },
+  },
   networks: {
     rinkeby: {
       url: `https://rinkeby.infura.io/v3/${WEB3_INFURA_PROJECT_ID}`,
@@ -33,5 +39,8 @@ module.exports = {
   },
   etherscan: {
     apiKey: ETHERSCAN_TOKEN,
+  },
+  mocha: {
+    timeout: 40000,
   },
 };
