@@ -20,7 +20,7 @@ module.exports = {
   settings: {
     optimizer: {
       enabled: true,
-      runs: 1000,
+      runs: 200,
     },
   },
   networks: {
@@ -42,5 +42,10 @@ module.exports = {
   },
   mocha: {
     timeout: 40000,
+  },
+  gasReporter: {
+    currency: "EUR",
+    gasPrice: 40,
+    coinmarketcap: "4faf0584-2aa2-4d45-98ab-8ecfec9c20e5",
   },
 };

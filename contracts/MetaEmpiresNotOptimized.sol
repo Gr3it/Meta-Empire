@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/utils/Counters.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 
-contract MetaEmpires is ERC721, Ownable {
+contract MetaEmpiresNotOptimized is ERC721, Ownable {
     using Counters for Counters.Counter;
     using Strings for uint256;
 
@@ -34,15 +34,15 @@ contract MetaEmpires is ERC721, Ownable {
     mapping(address => uint256) public nbOfCEsMintedBy;
     mapping(uint256 => bool) public isStaked;
 
-    uint128 public preSaleMintPrice;
-    uint64 public preSaleStartTime;
-    uint64 public preSaleDuration;
+    uint256 public preSaleMintPrice;
+    uint256 public preSaleStartTime;
+    uint256 public preSaleDuration;
 
-    uint64 public saleMintPrice;
-    uint64 public saleStartTime;
-    uint64 public saleDuration;
-    uint32 public saleMintCap;
-    uint32 public auctionPriceMultiplier;
+    uint256 public saleMintPrice;
+    uint256 public saleStartTime;
+    uint256 public saleDuration;
+    uint256 public saleMintCap;
+    uint256 public auctionPriceMultiplier;
 
     string private baseURI;
 
@@ -116,23 +116,18 @@ contract MetaEmpires is ERC721, Ownable {
     }
 
     function getAuctionPrice() public view returns (uint256) {
-        uint256 _saleStartTime = saleStartTime;
-        uint256 _saleDuration = saleDuration;
-        uint256 _saleMintPrice = saleMintPrice;
-        uint256 _auctionPriceMultiplier = auctionPriceMultiplier;
-
-        if (block.timestamp < _saleStartTime) {
-            return _saleMintPrice * _auctionPriceMultiplier;
+        if (block.timestamp < saleStartTime) {
+            return saleMintPrice * auctionPriceMultiplier;
         }
-        if (block.timestamp >= _saleStartTime + _saleDuration) {
-            return _saleMintPrice;
+        if (block.timestamp >= saleStartTime + saleDuration) {
+            return saleMintPrice;
         }
         return
-            (_saleMintPrice * _auctionPriceMultiplier) -
-            ((((AUCTION_INTERVAL + 1) * (block.timestamp - _saleStartTime)) /
-                _saleDuration) *
-                (_auctionPriceMultiplier - 1) *
-                _saleMintPrice) /
+            (saleMintPrice * auctionPriceMultiplier) -
+            ((((AUCTION_INTERVAL + 1) * (block.timestamp - saleStartTime)) /
+                saleDuration) *
+                (auctionPriceMultiplier - 1) *
+                saleMintPrice) /
             AUCTION_INTERVAL;
     }
 
@@ -141,13 +136,12 @@ contract MetaEmpires is ERC721, Ownable {
         payable
         callerIsUser
     {
-        uint256 _preSaleStartTime = preSaleStartTime;
         require(
-            preSaleStartTime != 0 && block.timestamp >= _preSaleStartTime,
+            preSaleStartTime != 0 && block.timestamp >= preSaleStartTime,
             "Pre sale not started yet"
         );
         require(
-            block.timestamp <= _preSaleStartTime + preSaleDuration,
+            block.timestamp <= preSaleStartTime + preSaleDuration,
             "Pre sale already ended"
         );
         require(
@@ -174,13 +168,12 @@ contract MetaEmpires is ERC721, Ownable {
     }
 
     function saleMintToken(uint256 _quantity) external payable callerIsUser {
-        uint256 _saleStartTime = saleStartTime;
         require(
-            saleStartTime != 0 && block.timestamp >= _saleStartTime,
+            saleStartTime != 0 && block.timestamp >= saleStartTime,
             "Sale not started yet"
         );
         require(
-            block.timestamp <= _saleStartTime + saleDuration,
+            block.timestamp <= saleStartTime + saleDuration,
             "Sale already ended"
         );
         require(
@@ -217,9 +210,9 @@ contract MetaEmpires is ERC721, Ownable {
     }
 
     function setPreSale(
-        uint128 _preSaleMintPrice,
-        uint64 _preSaleStartTime,
-        uint64 _preSaleDuration,
+        uint256 _preSaleMintPrice,
+        uint256 _preSaleStartTime,
+        uint256 _preSaleDuration,
         bytes32 _root
     ) external onlyOwner {
         preSaleMintPrice = _preSaleMintPrice;
@@ -229,11 +222,11 @@ contract MetaEmpires is ERC721, Ownable {
     }
 
     function setSale(
-        uint64 _saleMintPrice,
-        uint64 _saleStartTime,
-        uint32 _saleDuration,
-        uint32 _auctionPriceMultiplier,
-        uint32 _saleMintCap
+        uint256 _saleMintPrice,
+        uint256 _saleStartTime,
+        uint256 _saleDuration,
+        uint256 _auctionPriceMultiplier,
+        uint256 _saleMintCap
     ) external onlyOwner {
         saleMintPrice = _saleMintPrice;
         saleStartTime = _saleStartTime;
