@@ -1,7 +1,9 @@
 const { expect } = require("chai");
-const { ethers } = require("hardhat");
+const { ethers, waffle } = require("hardhat");
 const { MerkleTree } = require("merkletreejs");
 const keccak256 = require("keccak256");
+
+const provider = waffle.provider;
 
 const maxSupply = 4999;
 const maxMintPerAddress = 2;
@@ -20,7 +22,7 @@ const main = (contractName) => {
         auctionInterval
       );
 
-      const tx = await metaEmpires.setBaseURI(
+      await metaEmpires.setBaseURI(
         "ipfs://34895345093475jfef98n4q39'848r9mqy4/"
       );
       const whitelistAddresses = [
@@ -61,7 +63,9 @@ const main = (contractName) => {
         deployer[1].getAddress(),
         1
       );
-      await metaEmpires.withdraw();
+      console.log("Balance: ", await provider.getBalance(metaEmpires.address));
+      await metaEmpires.withdraw2();
+
       expect(1).to.be.equal(1);
     });
   });
@@ -74,5 +78,6 @@ const getTimeStamp = async () => {
   return timestampBefore;
 };
 
+// the first contract call will consume more gas on wallet found transfer because of the wallet initialization
 main("MetaEmpires");
 main("MetaEmpiresNotOptimized");
