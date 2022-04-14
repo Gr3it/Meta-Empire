@@ -19,10 +19,10 @@ const main = (contractName) => {
         teamReservedMint,
         auctionInterval
       );
+
       const tx = await metaEmpires.setBaseURI(
         "ipfs://34895345093475jfef98n4q39'848r9mqy4/"
       );
-      await tx.wait();
       const whitelistAddresses = [
         await deployer[0].getAddress(),
         await deployer[1].getAddress(),
@@ -37,6 +37,10 @@ const main = (contractName) => {
       const claimingAddress = leafNodes[1];
       const hexProof = merkleTree.getHexProof(claimingAddress);
       const preSaleStartTime = await getTimeStamp();
+      console.log(rootHash);
+      console.log(preSaleStartTime);
+      console.log(hexProof);
+
       await metaEmpires.setPreSale(
         1000000000,
         preSaleStartTime,
@@ -71,3 +75,4 @@ const getTimeStamp = async () => {
 };
 
 main("MetaEmpires");
+main("MetaEmpiresNotOptimized");

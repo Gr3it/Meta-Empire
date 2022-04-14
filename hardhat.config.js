@@ -16,11 +16,13 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 const { PRIVATE_KEY, WEB3_INFURA_PROJECT_ID, ETHERSCAN_TOKEN } = process.env;
 
 module.exports = {
-  solidity: "0.8.11",
-  settings: {
-    optimizer: {
-      enabled: true,
-      runs: 200,
+  solidity: {
+    version: "0.8.11",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 2000,
+      },
     },
   },
   networks: {
