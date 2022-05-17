@@ -39,9 +39,6 @@ const main = (contractName) => {
       const claimingAddress = leafNodes[1];
       const hexProof = merkleTree.getHexProof(claimingAddress);
       const preSaleStartTime = await getTimeStamp();
-      console.log(rootHash);
-      console.log(preSaleStartTime);
-      console.log(hexProof);
 
       await metaEmpires.setPreSale(
         1000000000,
@@ -64,7 +61,7 @@ const main = (contractName) => {
         1
       );
       console.log("Balance: ", await provider.getBalance(metaEmpires.address));
-      await metaEmpires.withdraw2();
+      await metaEmpires.withdraw();
 
       expect(1).to.be.equal(1);
     });
